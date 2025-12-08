@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Лабораторна робота №11</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<style>
+body {
+    background-color: #eea2a2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    margin: 0;
+}
+.box {
+    text-align: center;
+    background: #fff;
+    padding: 30px;
+    border-radius: 15px;
+    width: 350px;
+    margin: 100px;
+}
+#showword {
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #333;
+}
+#answer {
+    padding: 10px;
+    width: 100%;
+    font-size: 16px;
+    margin-bottom: 12px;
+    border: 1px solid #aaa;
+    border-radius: 8px;
+}
+#checkBtn {
+    padding: 10px 20px;
+    font-size: 16px;
+    margin-bottom: 15px;
+    border: none;
+    border-radius: 8px;
+    background: #3c3d3d;
+    color: #fff;
+}
+.stats {
+    display: flex;
+    justify-content: space-between;
+    font-size: 16px;
+    margin-bottom: 10px;
+    color: #555;
+}
+#final {
+    margin-top: 20px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #222;
+}
+@media (max-width: 400px) {
+    #showword { font-size: 24px; }
+    #answer, #checkBtn { font-size: 14px; padding: 8px; }
+    .stats { font-size: 14px; flex-direction: column; gap: 5px; align-items: center; }
+    #final { font-size: 14px; }
+}
+</style>
+</head>
+<body>
+
+<div class="box">
+    <div id="showword">Слово</div>
+    <input id="answer" type="text" placeholder="Введіть переклад">
+    <button id="checkBtn">Перевірити</button>
+    <div class="stats">
+        <div id="correct">Правильно: 0</div>
+        <div id="wrong">Неправильно: 0</div>
+    </div>
+    <div id="krok">Крок 0 / 10</div>
+    <div id="final"></div>
+</div>
+<script>
+    let words=[
+        {en:"pronunciation", ua:"вимова"},
+        {en:"otorhinolaryngologist", ua:"отоларинголог"},
+        {en:"entrepreneur", ua:"підприємець"},
+        {en:"thoart", ua:"горло"},
+        {en:"flu", ua:"грип"},
+        {en:"surgeon", ua:"хірург"},
+        {en:"low", ua:"низький"},
+        {en:"language", ua:"мова"},
+        {en:"last", ua:"останній"},
+        {en:"rular", ua:"сільський"}
+    ];
+
+    let randomwords = words.sort(() => Math.random() - 0.5).slice(0,10);
+    let startIndex = 0;
+    let wordtrue = 0;
+    let wordfalse = 0;
+function word(){
+        $("#showword").text(randomwords[startIndex].en);
+        $("#krok").text("Крок " + (startIndex+1) + "/10");
+    }
+function perevirka(){
+        let user = $("#answer").val().trim().toLowerCase();
+        let trueanswer = randomwords[startIndex].ua;
+
+        if(user === trueanswer){
+            wordtrue++;
+            $("#result").text("Правильно!");
+        } else {
+            wordfalse++;
+            $("#result").text("Неправильно! Правильна відповідь: " + trueanswer);
+        }
+
+        $("#answer").val("");
+        startIndex++;
+
+        if(startIndex === 10){
+            finalResult();
+        } else {
+            word();
+        }
+    }
+function finalResult(){
+        let level = "";
+        if(wordtrue === 10) level = "Високий рівень";
+        else if(wordtrue >= 5) level = "Середній рівень";
+        else level = "Низький рівень";
+
+        $("#final").html(
+            "Правильно: " + wordtrue + "<br>" +
+            "Неправильно: " + wordfalse + "<br>" +
+            "Рівень: " + level
+        );
+    }
+    $("#answer").keypress(function(e){
+        if(e.which === 13){
+            $("#checkBtn").click();
+        }
+    });
+    $("#checkBtn").click(function(){
+        perevirka();
+    });
+    word();
+</script>
+</body>
+</html>
