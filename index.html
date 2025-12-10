@@ -7,56 +7,50 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <style>
 body {
-    background-color: #eea2a2;
+    background-color: #abd4f8;
     display: flex;
     justify-content: center;
-    align-items: center;
     height: 100%;
     margin: 0;
 }
 .box {
     text-align: center;
-    background: #fff;
+    background: #ffffffa5;
     padding: 30px;
-    border-radius: 15px;
     width: 350px;
     margin: 100px;
 }
 #showword {
-    font-size: 32px;
+    font-size: 40px;
     font-weight: bold;
     margin-bottom: 20px;
-    color: #333;
 }
 #answer {
-    padding: 10px;
+    align-items: center;
     width: 100%;
-    font-size: 16px;
-    margin-bottom: 12px;
-    border: 1px solid #aaa;
-    border-radius: 8px;
+    height: 30px;
+    font-size: 15px;
+    margin-bottom: 15px;
+    border-radius: 15px;
 }
 #checkBtn {
-    padding: 10px 20px;
-    font-size: 16px;
+    padding: 10px;
+    font-size: 15px;
     margin-bottom: 15px;
-    border: none;
-    border-radius: 8px;
-    background: #3c3d3d;
-    color: #fff;
+    border-radius: 20px;
+    background: #71bafa;
 }
 .stats {
     display: flex;
     justify-content: space-between;
-    font-size: 16px;
-    margin-bottom: 10px;
-    color: #555;
+    color: #220d73;
+    font-weight: bold;
 }
 #final {
     margin-top: 20px;
-    font-size: 16px;
-    font-weight: bold;
-    color: #222;
+}
+#result{
+    margin-bottom: 10px;
 }
 @media (max-width: 400px) {
     #showword { font-size: 24px; }
@@ -67,11 +61,11 @@ body {
 </style>
 </head>
 <body>
-
 <div class="box">
     <div id="showword">Слово</div>
     <input id="answer" type="text" placeholder="Введіть переклад">
     <button id="checkBtn">Перевірити</button>
+    <div id="result"></div>
     <div class="stats">
         <div id="correct">Правильно: 0</div>
         <div id="wrong">Неправильно: 0</div>
@@ -103,15 +97,23 @@ function word(){
     }
 function perevirka(){
         let user = $("#answer").val().trim().toLowerCase();
+        if(user === ""){
+            alert("Ви нічого не ввели!");
+            return;
+        }
         let trueanswer = randomwords[startIndex].ua;
 
         if(user === trueanswer){
             wordtrue++;
-            $("#result").text("Правильно!");
+            $("#result").css("color", "green").text("Правильно!");
         } else {
             wordfalse++;
-            $("#result").text("Неправильно! Правильна відповідь: " + trueanswer);
+            $("#result").css("color", "red")
+            .text("Неправильно! Правильна відповідь: " + trueanswer);
         }
+
+        $("#correct").text("Правильно: " + wordtrue);
+        $("#wrong").text("Неправильно: " + wordfalse);
 
         $("#answer").val("");
         startIndex++;
@@ -128,12 +130,12 @@ function finalResult(){
         else if(wordtrue >= 5) level = "Середній рівень";
         else level = "Низький рівень";
 
-        $("#final").html(
-            "Правильно: " + wordtrue + "<br>" +
-            "Неправильно: " + wordfalse + "<br>" +
-            "Рівень: " + level
-        );
-    }
+ alert(
+        "Правильно: " + wordtrue +
+        "\nНеправильно: " + wordfalse +
+        "\nРівень: " + level
+);}
+
     $("#answer").keypress(function(e){
         if(e.which === 13){
             $("#checkBtn").click();
